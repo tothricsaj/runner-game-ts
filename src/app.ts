@@ -3,10 +3,15 @@ import GameObject from './GameObject'
 class Game {
   private canvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
+
   private enemyCoorX: number
   private enemyCoorY: number
 
+  private playerCoorX: number
+  private playerCoorY: number
+
   private enemy: GameObject
+  private player: GameObject
 
   constructor() {
     this.canvas = document.getElementById('canvas') as HTMLCanvasElement
@@ -15,14 +20,28 @@ class Game {
     this.enemyCoorX = 470
     this.enemyCoorY = 255
 
+    this.playerCoorX = 100
+    this.playerCoorY = 230
+
     this.enemy = new GameObject({
-      ctx: this.context,
-      x: this.enemyCoorX,
-      y: this.enemyCoorY,
-      width: 25,
-      height: 25,
-      fillStyle: 'lightgrey'
-    })
+        x: this.enemyCoorX,
+        y: this.enemyCoorY,
+        width: 25,
+        height: 25,
+        fillStyle: 'lightgrey'
+      },
+      this.context
+    )
+
+    this.player = new GameObject({
+        x: this.playerCoorX,
+        y: this.playerCoorY,
+        width: 50,
+        height: 50,
+        fillStyle: 'orange'
+      },
+      this.context
+    )
 
     window.requestAnimationFrame(() => this.animate(this.context))
   }
@@ -39,11 +58,8 @@ class Game {
       this.enemyCoorX -= 5
     }
 
-    // enemy
-    // ctx.fillStyle = 'lightgrey'
-    // ctx.fillRect(this.enemyCoorX, this.enemyCoorY, 25, 25)
-
     this.enemy.draw(this.enemyCoorX, this.enemyCoorY)
+    this.player.draw()
 
     // sky
     this.context.fillStyle = 'lightblue'
@@ -60,10 +76,6 @@ class Game {
     this.context.arc(230, 200, 10, 15, Math.PI * 2, true)
     this.context.arc(350, 200, 10, 15, Math.PI * 2, true)
     this.context.fill()
-
-    // player
-    this.context.fillStyle = 'orange'
-    this.context.fillRect(100, 230, 50, 50)
 
     ctx.restore()
 
