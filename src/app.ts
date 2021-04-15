@@ -1,8 +1,12 @@
+import GameObject from './GameObject'
+
 class Game {
   private canvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
   private enemyCoorX: number
   private enemyCoorY: number
+
+  private enemy: GameObject
 
   constructor() {
     this.canvas = document.getElementById('canvas') as HTMLCanvasElement
@@ -11,11 +15,19 @@ class Game {
     this.enemyCoorX = 470
     this.enemyCoorY = 255
 
+    this.enemy = new GameObject({
+      ctx: this.context,
+      x: this.enemyCoorX,
+      y: this.enemyCoorY,
+      width: 25,
+      height: 25,
+      fillStyle: 'lightgrey'
+    })
+
     window.requestAnimationFrame(() => this.animate(this.context))
   }
 
   animate(ctx: CanvasRenderingContext2D) {
-    // enemy
     ctx.save()
 
     ctx.fillStyle = 'white'
@@ -27,8 +39,11 @@ class Game {
       this.enemyCoorX -= 5
     }
 
-    ctx.fillStyle = 'lightgrey'
-    ctx.fillRect(this.enemyCoorX, this.enemyCoorY, 25, 25)
+    // enemy
+    // ctx.fillStyle = 'lightgrey'
+    // ctx.fillRect(this.enemyCoorX, this.enemyCoorY, 25, 25)
+
+    this.enemy.draw(this.enemyCoorX, this.enemyCoorY)
 
     // sky
     this.context.fillStyle = 'lightblue'
@@ -54,6 +69,8 @@ class Game {
 
     window.requestAnimationFrame(() => this.animate(ctx))
   }
+
+  foo() {console.log('foo')}
 }
 
 const app = new Game()
