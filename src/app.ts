@@ -8,28 +8,19 @@ class Game {
 
   private running: boolean
 
-  private enemyCoorX: number
-  private enemyCoorY: number
-
-  private playerCoorX: number
-  private playerCoorY: number
-
   private enemy: GameObject
   private player: GameObject
+  private gravityVel = -3
 
+  // TODO(tothricsaj): objectCoors is already not nessecery. Do refactor!
   private objectCoors: any
+  private gravity: any
 
   constructor() {
     this.canvas = document.getElementById('canvas') as HTMLCanvasElement
     this.context = this.canvas.getContext('2d')!
 
     this.running = false
-
-    this.enemyCoorX = 470
-    this.enemyCoorY = 255
-
-    this.playerCoorX = 100
-    this.playerCoorY = 230
 
     this.objectCoors = {
       enemy: {
@@ -42,10 +33,14 @@ class Game {
       player: {
         x: 100,
         y: 230,
-        width: 50,
+        width: 25,
         height: 50,
         fillStyle: 'orange'
       }
+    }
+
+    this.gravity = {
+      downSide: false
     }
 
     this.enemy = new GameObject({
@@ -61,14 +56,16 @@ class Game {
     this.player = new GameObject({
         x: this.objectCoors.player.x,
         y: this.objectCoors.player.y,
-        width: 50,
-        height: 50,
+        width: this.objectCoors.player.width,
+        height: this.objectCoors.player.height,
         fillStyle: 'orange'
       },
       this.context
     )
 
     this.drawStaticObjects()
+
+    document.addEventListener('keydown', () => this.keyDownHandler(event), false)
   }
 
   start() {
@@ -84,22 +81,36 @@ class Game {
   }
 
   animate(ctx: CanvasRenderingContext2D): void {
+    const player = this.objectCoors.player
+    const enemy = this.objectCoors.enemy
+
     if(this.running) {
       ctx.save()
 
       ctx.fillStyle = 'white'
       ctx.fillRect(0, 0, 500, 300)
 
-      if(this.objectCoors.enemy.x <= -25) {
-        // this.enemyCoorX = 500
-        this.objectCoors.enemy.x = 500
+      if(enemy.x <= -25) {
+        enemy.x = 500
       } else {
-        // this.enemyCoorX -= 5
-        this.objectCoors.enemy.x -= 5
+        enemy.x -= 5
       }
 
-      this.enemy.draw(this.objectCoors.enemy.x, this.objectCoors.enemy.y)
-      this.player.draw()
+      if((player.y > 230 || player.y < 190) && this.gravity.downSide) {
+        this.gravityVel = -this.gravityVel
+      }
+
+      if(this.gravity.downSide) {
+        player.y += this.gravityVel
+
+        if(player.y >= 230) {
+          this.gravity.downSide = false
+          this.gravityVel = -3
+        }
+      }
+
+      this.enemy.draw(enemy.x, enemy.y)
+      this.player.draw(player.x, player.y)
 
       this.drawStaticObjects()
 
@@ -127,22 +138,28 @@ class Game {
   }
 
   drawStaticObjects(): void {
-      // sky
-      this.context.fillStyle = 'lightblue'
-      this.context.fillRect(0, 0, 500, 150)
+    // sky
+    this.context.fillStyle = 'lightblue'
+    this.context.fillRect(0, 0, 500, 150)
 
-      // grass
-      this.context.fillStyle = 'lightgreen'
-      this.context.fillRect(0, 280, 500, 20)
+    // grass
+    this.context.fillStyle = 'lightgreen'
+    this.context.fillRect(0, 280, 500, 20)
 
-      // coins
-      this.context.fillStyle = 'gold'
-      this.context.beginPath()
-      this.context.arc(180, 200, 10, 15, Math.PI * 2, true)
-      this.context.arc(230, 200, 10, 15, Math.PI * 2, true)
-      this.context.arc(350, 200, 10, 15, Math.PI * 2, true)
-      this.context.fill()
+    // coins
+    this.context.fillStyle = 'gold'
+    this.context.beginPath()
+    this.context.arc(180, 200, 10, 15, Math.PI * 2, true)
+    this.context.arc(230, 200, 10, 15, Math.PI * 2, true)
+    this.context.arc(350, 200, 10, 15, Math.PI * 2, true)
+    this.context.fill()
+  }
+
+  keyDownHandler(e: any) {
+    if(e.keyCode === 38) {
+      this.gravity.downSide = true
     }
+  }
 }
 
 const app = new Game()
