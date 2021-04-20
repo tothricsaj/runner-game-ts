@@ -67,6 +67,8 @@ class Game {
       },
       this.context
     )
+
+    this.drawStaticObjects()
   }
 
   start() {
@@ -96,25 +98,10 @@ class Game {
         this.objectCoors.enemy.x -= 5
       }
 
-
       this.enemy.draw(this.objectCoors.enemy.x, this.objectCoors.enemy.y)
       this.player.draw()
 
-      // sky
-      this.context.fillStyle = 'lightblue'
-      this.context.fillRect(0, 0, 500, 150)
-
-      // grass
-      this.context.fillStyle = 'lightgreen'
-      this.context.fillRect(0, 280, 500, 20)
-
-      // coins
-      this.context.fillStyle = 'gold'
-      this.context.beginPath()
-      this.context.arc(180, 200, 10, 15, Math.PI * 2, true)
-      this.context.arc(230, 200, 10, 15, Math.PI * 2, true)
-      this.context.arc(350, 200, 10, 15, Math.PI * 2, true)
-      this.context.fill()
+      this.drawStaticObjects()
 
       ctx.restore()
 
@@ -138,6 +125,24 @@ class Game {
       this.stop()
     }
   }
+
+  drawStaticObjects(): void {
+      // sky
+      this.context.fillStyle = 'lightblue'
+      this.context.fillRect(0, 0, 500, 150)
+
+      // grass
+      this.context.fillStyle = 'lightgreen'
+      this.context.fillRect(0, 280, 500, 20)
+
+      // coins
+      this.context.fillStyle = 'gold'
+      this.context.beginPath()
+      this.context.arc(180, 200, 10, 15, Math.PI * 2, true)
+      this.context.arc(230, 200, 10, 15, Math.PI * 2, true)
+      this.context.arc(350, 200, 10, 15, Math.PI * 2, true)
+      this.context.fill()
+    }
 }
 
 const app = new Game()
