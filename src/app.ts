@@ -116,10 +116,10 @@ class Game {
     const enemy = this.objectCoors.enemy
 
     if(
-      player.x < enemy.x + enemy.width &&
-      player.x + player.width > enemy.x &&
-      player.y < enemy.y + enemy.height &&
-      player.y + player.height > enemy.y
+      player.x <= enemy.x + enemy.width &&
+      player.x + player.width >= enemy.x &&
+      player.y <= enemy.y + enemy.height &&
+      player.y + player.height >= enemy.y
      
     ) {
       this.stop()
