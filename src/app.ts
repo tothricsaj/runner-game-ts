@@ -9,6 +9,8 @@ class Game {
 
   private running: boolean
 
+  private enemyAttackPeriod = true
+
   private enemy: GameObject
   private player: GameObject
   private coin: CoinGameObject
@@ -114,12 +116,20 @@ class Game {
       ctx.fillRect(0, 0, 500, 300)
 
       // enemy animation
-      if(enemy.x <= -25) {
-        enemy.x = 500
-      } else {
-        enemy.x -= 4
+      if(Math.ceil(Math.random() * 100) > 97 && enemy.x > -25) {
+        console.log("enemy is attacking")
+        this.enemyAttackPeriod = true
       }
 
+      if(enemy.x <= -25) {
+        enemy.x = 550
+        this.enemyAttackPeriod = false
+      }
+
+      if(this.enemyAttackPeriod)
+          enemy.x -= 4
+
+      this.enemy.draw(enemy.x, enemy.y)
       // gravity
       if((player.y > 230 || player.y < 190) && this.gravity.downSide) {
         this.gravityVel = -this.gravityVel
@@ -149,7 +159,6 @@ class Game {
 
       player.x += this.plyarXCoorMove
 
-      this.enemy.draw(enemy.x, enemy.y)
       this.player.draw(player.x, player.y)
 
       this.drawStaticObjects()
