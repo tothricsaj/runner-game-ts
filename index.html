@@ -7,6 +7,11 @@
   <title>TS Runner Game</title>
 
   <style>
+    .game-wrapper {
+      max-width: 600px;
+      margin: auto;
+      padding: 50px;
+    }
     canvas {
       display: block;
       margin: auto;
@@ -24,12 +29,17 @@
 </head>
 <body>
   <h2>TS Runner Game</h2>
-  <canvas
-    id="canvas"
-    width="500"
-    height="300"
-    style="border: 1px solid black;"
-  ></canvas>
+  <div class="game-wrapper">
+
+    <p id="score">Score: 0</p>
+    <canvas
+      id="canvas"
+      width="500"
+      height="300"
+      style="border: 1px solid black;"
+    ></canvas>
+
+  </div>
 
   <div class="start button">Start</div>
   <div class="stop button">Stop</div>

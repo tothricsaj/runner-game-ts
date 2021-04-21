@@ -5,9 +5,12 @@ class Game {
   private canvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
 
+  private scoreElement: HTMLParagraphElement
+
   private animationFrame: any
 
   private running: boolean
+  private score = 0
 
   private enemyAttackPeriod = true
   private coinOnBord = true
@@ -27,6 +30,8 @@ class Game {
   constructor() {
     this.canvas = document.getElementById('canvas') as HTMLCanvasElement
     this.context = this.canvas.getContext('2d')!
+
+    this.scoreElement = document.querySelector('#score') as HTMLParagraphElement
 
     this.running = false
 
@@ -119,7 +124,7 @@ class Game {
 
       // enemy animation
       if(Math.ceil(Math.random() * 100) > 97 && enemy.x > -25) {
-        console.log("enemy is attacking")
+        // console.log("enemy is attacking")
         this.enemyAttackPeriod = true
       }
 
@@ -137,7 +142,7 @@ class Game {
 
       // coin ////////////////////////////////////////////////////
       if(Math.ceil(Math.random() * 100) > 99 && coin.x > -25) {
-        console.log("enemy is attacking")
+        // console.log("enemy is attacking")
         this.coinOnBord = true
       }
 
@@ -197,15 +202,26 @@ class Game {
   collosion() {
     const player = this.objectCoors.player
     const enemy = this.objectCoors.enemy
+    const coin = this.objectCoors.coin
 
     if(
       player.x <= enemy.x + enemy.width &&
       player.x + player.width >= enemy.x &&
       player.y <= enemy.y + enemy.height &&
       player.y + player.height >= enemy.y
-     
     ) {
       this.stop()
+    } else if(
+      player.x <= coin.x + coin.width &&
+      player.x + player.width >= coin.x &&
+      player.y <= coin.y + coin.height &&
+      player.y + player.height >= coin.y
+    ) {
+      coin.x = 550
+      this.coinOnBord = false
+      this.score += 10
+
+      this.scoreElement.textContent = `Score: ${this.score}`
     }
   }
 
