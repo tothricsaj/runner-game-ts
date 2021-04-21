@@ -10,6 +10,7 @@ class Game {
   private running: boolean
 
   private enemyAttackPeriod = true
+  private coinOnBord = true
 
   private enemy: GameObject
   private player: GameObject
@@ -45,7 +46,7 @@ class Game {
         fillStyle: 'orange'
       },
       coin: {
-        x: 180,
+        x: 550,
         y: 200,
         width: 10,
         height: 15,
@@ -108,6 +109,7 @@ class Game {
   animate(ctx: CanvasRenderingContext2D): void {
     const player = this.objectCoors.player
     const enemy = this.objectCoors.enemy
+    const coin = this.objectCoors.coin
 
     if(this.running) {
       ctx.save()
@@ -130,7 +132,28 @@ class Game {
           enemy.x -= 4
 
       this.enemy.draw(enemy.x, enemy.y)
-      // gravity
+
+      ////////////////////////////////////////////////////////////
+
+      // coin ////////////////////////////////////////////////////
+      if(Math.ceil(Math.random() * 100) > 99 && coin.x > -25) {
+        console.log("enemy is attacking")
+        this.coinOnBord = true
+      }
+
+      if(coin.x <= -25) {
+        coin.x = 550
+        this.coinOnBord = false
+      }
+
+      if(this.coinOnBord)
+          coin.x -= 2
+
+      this.coin.draw(coin.x, coin.y)
+
+      ////////////////////////////////////////////////////////////
+
+      // gravity /////////////////////////////////////////////////
       if((player.y > 230 || player.y < 190) && this.gravity.downSide) {
         this.gravityVel = -this.gravityVel
       }
@@ -187,6 +210,7 @@ class Game {
   }
 
   drawStaticObjects(): void {
+    let coin = this.objectCoors.coin
     // sky
     this.context.fillStyle = 'lightblue'
     this.context.fillRect(0, 0, 500, 150)
@@ -196,12 +220,10 @@ class Game {
     this.context.fillRect(0, 280, 500, 20)
 
     // coins
-    this.context.fillStyle = 'gold'
-    this.context.beginPath()
-    this.context.arc(370, 200, 10, 15, Math.PI * 2, true)
-    this.context.fill()
-
-    this.coin.draw(this.objectCoors.coin.x, this.objectCoors.coin.y)
+    // this.context.fillStyle = 'gold'
+    // this.context.beginPath()
+    // this.context.arc(370, 200, 10, 15, Math.PI * 2, true)
+    // this.context.fill()
   }
 
   keyDownHandler(e: any) {
