@@ -12,6 +12,8 @@ class Game {
   private player: GameObject
   private gravityVel = -3
 
+  private plyarXCoorMove = 0
+
   // TODO(tothricsaj): objectCoors is already not nessecery. Do refactor!
   private objectCoors: any
   private gravity: any
@@ -26,7 +28,7 @@ class Game {
       enemy: {
         x: 470,
         y: 255,
-        width: 25,
+        width: 10,
         height: 25,
         fillStyle: 'lightgrey'
       },
@@ -46,8 +48,8 @@ class Game {
     this.enemy = new GameObject({
         x: this.objectCoors.enemy.x,
         y: this.objectCoors.enemy.y,
-        width: 25,
-        height: 25,
+        width: this.objectCoors.enemy.width,
+        height: this.objectCoors.enemy.height,
         fillStyle: 'lightgrey'
       },
       this.context
@@ -66,6 +68,7 @@ class Game {
     this.drawStaticObjects()
 
     document.addEventListener('keydown', () => this.keyDownHandler(event), false)
+    document.addEventListener('keyup', () => this.keyUpHandler(event), false)
   }
 
   start() {
@@ -90,12 +93,14 @@ class Game {
       ctx.fillStyle = 'white'
       ctx.fillRect(0, 0, 500, 300)
 
+      // enemy animation
       if(enemy.x <= -25) {
         enemy.x = 500
       } else {
-        enemy.x -= 5
+        enemy.x -= 4
       }
 
+      // gravity
       if((player.y > 230 || player.y < 190) && this.gravity.downSide) {
         this.gravityVel = -this.gravityVel
       }
@@ -108,6 +113,21 @@ class Game {
           this.gravityVel = -3
         }
       }
+      ////////////////////////////////////////////////////////////
+
+      console.log(player.x)
+      if(player.x > 450 || player.x < 20) {
+        this.plyarXCoorMove = 0
+      }
+
+      if(player.x < 20)
+        player.x = player.x + 3
+
+      if(player.x > 450) {
+        player.x = player.x - 3
+      }
+
+      player.x += this.plyarXCoorMove
 
       this.enemy.draw(enemy.x, enemy.y)
       this.player.draw(player.x, player.y)
@@ -156,8 +176,26 @@ class Game {
   }
 
   keyDownHandler(e: any) {
+
+    const player = this.objectCoors.player
+
+    let playerVel = 3
+
+    // console.log(e.keyCode)
     if(e.keyCode === 38) {
       this.gravity.downSide = true
+    } else if(e.keyCode === 39 && player.x < 450) {
+      this.plyarXCoorMove = playerVel
+    } else if(e.keyCode === 37 && player.x > 20) {
+      this.plyarXCoorMove = -playerVel
+    } else if(e.keyCode === 32) {
+      this.start()
+    }
+  }
+
+  keyUpHandler(e: any) {
+    if(e.keyCode === 39 || e.keyCode === 37) {
+      this.plyarXCoorMove = 0
     }
   }
 }
