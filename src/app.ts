@@ -1,4 +1,5 @@
 import GameObject from './GameObject'
+import CoinGameObject from './CoinGameObject'
 
 class Game {
   private canvas: HTMLCanvasElement
@@ -10,6 +11,8 @@ class Game {
 
   private enemy: GameObject
   private player: GameObject
+  private coin: CoinGameObject
+
   private gravityVel = -3
 
   private plyarXCoorMove = 0
@@ -38,6 +41,13 @@ class Game {
         width: 25,
         height: 50,
         fillStyle: 'orange'
+      },
+      coin: {
+        x: 180,
+        y: 200,
+        width: 10,
+        height: 15,
+        fillStyle: 'gold'
       }
     }
 
@@ -46,21 +56,31 @@ class Game {
     }
 
     this.enemy = new GameObject({
-        x: this.objectCoors.enemy.x,
-        y: this.objectCoors.enemy.y,
-        width: this.objectCoors.enemy.width,
-        height: this.objectCoors.enemy.height,
-        fillStyle: 'lightgrey'
+      x: this.objectCoors.enemy.x,
+      y: this.objectCoors.enemy.y,
+      width: this.objectCoors.enemy.width,
+      height: this.objectCoors.enemy.height,
+      fillStyle: 'lightgrey'
       },
       this.context
     )
 
     this.player = new GameObject({
-        x: this.objectCoors.player.x,
-        y: this.objectCoors.player.y,
-        width: this.objectCoors.player.width,
-        height: this.objectCoors.player.height,
-        fillStyle: 'orange'
+      x: this.objectCoors.player.x,
+      y: this.objectCoors.player.y,
+      width: this.objectCoors.player.width,
+      height: this.objectCoors.player.height,
+      fillStyle: 'orange'
+      },
+      this.context
+    )
+
+    this.coin = new CoinGameObject({
+      x: this.objectCoors.coin.x,
+      y: this.objectCoors.coin.y,
+      width: this.objectCoors.coin.width,
+      height: this.objectCoors.coin.height,
+      fillStyle: 'gold'
       },
       this.context
     )
@@ -169,10 +189,10 @@ class Game {
     // coins
     this.context.fillStyle = 'gold'
     this.context.beginPath()
-    this.context.arc(180, 200, 10, 15, Math.PI * 2, true)
-    this.context.arc(230, 200, 10, 15, Math.PI * 2, true)
-    this.context.arc(350, 200, 10, 15, Math.PI * 2, true)
+    this.context.arc(370, 200, 10, 15, Math.PI * 2, true)
     this.context.fill()
+
+    this.coin.draw(this.objectCoors.coin.x, this.objectCoors.coin.y)
   }
 
   keyDownHandler(e: any) {

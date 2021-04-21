@@ -1,16 +1,10 @@
-interface GameObjectDimension {
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  fillStyle?: string
-}
+import GameObjectDimension from './GameObjectDimesionInterface'
 
 class GameObject {
 
   constructor(
-    private dim: GameObjectDimension,
-    private ctx: CanvasRenderingContext2D
+    protected dim: GameObjectDimension,
+    protected ctx: CanvasRenderingContext2D
   ) {}
 
   draw(x?: number, y?: number) {
